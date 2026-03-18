@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,9 +40,33 @@ interface RegisteredConference {
   conferenceName: string;
   registeredDate: string;
   status: 'pending' | 'approved' | 'rejected';
+  email?: string;
+  name?: string;
+  phone_whatsapp?: string;
+  gender?: string;
+  affiliation?: string;
+  country?: string;
+  registration_category?: string;
+  paper_id?: string;
+  paper_title?: string;
+  paper_pages?: string;
+  remarks?: string;
 }
 
+interface Conference {
+  id: string;
+  name: string;
+}
+
+const mockAllConferences: Conference[] = [
+  { id: '1', name: 'Tech Summit 2026' },
+  { id: '2', name: 'AI Conference' },
+  { id: '3', name: 'Digital Innovation Forum' },
+  { id: '4', name: 'Cloud Computing Summit' },
+];
+
 export default function RegistrationFormPage() {
+  const searchParams = useSearchParams();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,9 +88,50 @@ export default function RegistrationFormPage() {
     membership_file: null,
   });
   const [registeredConferences, setRegisteredConferences] = useState<RegisteredConference[]>([
-    { conferenceId: '1', conferenceName: 'Tech Summit 2026', registeredDate: '2026-03-01', status: 'approved' },
-    { conferenceId: '2', conferenceName: 'AI Conference', registeredDate: '2026-04-15', status: 'pending' },
+    { 
+      conferenceId: '1', 
+      conferenceName: 'Tech Summit 2026', 
+      registeredDate: '2026-03-01', 
+      status: 'approved',
+      email: 'john.doe@example.com',
+      name: 'John Doe',
+      phone_whatsapp: '+91 98765 43210',
+      gender: 'male',
+      affiliation: 'Tech Corp',
+      country: 'India',
+      registration_category: 'professional',
+      paper_id: 'PAPER-001',
+      paper_title: 'Advanced Tech Solutions',
+      paper_pages: '12',
+      remarks: 'Looking forward to the summit'
+    },
+    { 
+      conferenceId: '2', 
+      conferenceName: 'AI Conference', 
+      registeredDate: '2026-04-15', 
+      status: 'pending',
+      email: 'john.doe@example.com',
+      name: 'John Doe',
+      phone_whatsapp: '+91 98765 43210',
+      gender: 'male',
+      affiliation: 'Tech Corp',
+      country: 'India',
+      registration_category: 'researcher',
+      paper_id: 'PAPER-002',
+      paper_title: 'AI in Industry',
+      paper_pages: '15',
+      remarks: ''
+    },
   ]);
+
+  // Initialize form with URL params if coming from conferences page
+  useEffect(() => {
+    const conferenceId = searchParams.get('conferenceId');
+    if (conferenceId && !editingId) {
+      setForm(prev => ({ ...prev, conferenceId }));
+      setShowForm(true);
+    }
+  }, [searchParams, editingId]);
 
   const pendingConferences = registeredConferences.filter(c => c.status === 'pending');
   const approvedConferences = registeredConferences.filter(c => c.status === 'approved');
@@ -94,13 +160,26 @@ export default function RegistrationFormPage() {
 
   const handleEditRegistration = (conferenceId: string) => {
     setEditingId(conferenceId);
-    // Populate form with existing data (in a real app, fetch this data)
+    // Populate form with existing data
     const conf = registeredConferences.find(c => c.conferenceId === conferenceId);
     if (conf) {
-      setForm(prev => ({
-        ...prev,
+      setForm({
         conferenceId: conf.conferenceId,
-      }));
+        email: conf.email || '',
+        name: conf.name || '',
+        email_confirm: conf.email || '',
+        phone_whatsapp: conf.phone_whatsapp || '',
+        gender: conf.gender || '',
+        affiliation: conf.affiliation || '',
+        country: conf.country || '',
+        registration_category: conf.registration_category || 'attendee',
+        paper_id: conf.paper_id || '',
+        paper_title: conf.paper_title || '',
+        paper_pages: conf.paper_pages || '',
+        student_id_file: null,
+        remarks: conf.remarks || '',
+        membership_file: null,
+      });
     }
     setShowForm(true);
   };
@@ -116,7 +195,7 @@ export default function RegistrationFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.email || !form.name || !form.email_confirm || !form.phone_whatsapp) {
+    if (!form.conferenceId || !form.email || !form.name || !form.email_confirm || !form.phone_whatsapp) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -170,6 +249,28 @@ export default function RegistrationFormPage() {
           {/* Registration Form */}
           <Card className="p-8 border-slate-200">
             <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Section 0: Conference Selection */}
+              <div className="border-b border-slate-200 pb-8">
+                <h2 className="text-xl font-semibold text-slate-900 mb-6">Conference Selection</h2>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-slate-700 font-medium">Select Conference *</Label>
+                    <Select value={form.conferenceId} onValueChange={(value) => handleInputChange('conferenceId', value)}>
+                      <SelectTrigger className="mt-2 bg-white border-slate-200">
+                        <SelectValue placeholder="Choose a conference" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockAllConferences.map(conf => (
+                          <SelectItem key={conf.id} value={conf.id}>
+                            {conf.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
               {/* Section 1: Personal Information */}
               <div className="border-b border-slate-200 pb-8">
                 <h2 className="text-xl font-semibold text-slate-900 mb-6">Personal Information</h2>
