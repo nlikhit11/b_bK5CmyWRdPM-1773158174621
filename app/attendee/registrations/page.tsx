@@ -32,7 +32,6 @@ interface RegisteredConference {
 }
 
 export default function RegistrationFormPage() {
-  const searchParams = useSearchParams();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [registeredConferences, setRegisteredConferences] = useState<RegisteredConference[]>([
     { conferenceId: '1', conferenceName: 'Tech Summit 2026', registeredDate: '2026-03-01', status: 'approved' },
