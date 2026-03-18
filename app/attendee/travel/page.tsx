@@ -40,13 +40,6 @@ interface TravelFormData {
   flight_number: string;
   flight_arrival: string;
   flight_departure: string;
-  accommodation_required: boolean;
-  accommodation_type: string;
-  check_in_date: string;
-  check_out_date: string;
-  special_requirements: string;
-  is_student: boolean;
-  student_grant_required: boolean;
   remarks: string;
 }
 
@@ -76,13 +69,6 @@ export default function AttendeesTravelForm() {
     flight_number: '',
     flight_arrival: '',
     flight_departure: '',
-    accommodation_required: false,
-    accommodation_type: 'hostel',
-    check_in_date: '',
-    check_out_date: '',
-    special_requirements: '',
-    is_student: false,
-    student_grant_required: false,
     remarks: '',
   });
   const [loading, setLoading] = useState(false);
@@ -133,13 +119,6 @@ export default function AttendeesTravelForm() {
         flight_number: '',
         flight_arrival: '',
         flight_departure: '',
-        accommodation_required: false,
-        accommodation_type: 'hostel',
-        check_in_date: '',
-        check_out_date: '',
-        special_requirements: '',
-        is_student: false,
-        student_grant_required: false,
         remarks: '',
       });
     } catch (error) {
@@ -452,110 +431,7 @@ export default function AttendeesTravelForm() {
               </div>
             </div>
 
-            {/* Section 5: Accommodation */}
-            <div className="border-b border-slate-200 pb-8">
-              <h2 className="text-xl font-semibold text-slate-900 mb-6">Accommodation</h2>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <input
-                    type="checkbox"
-                    id="accommodation_required"
-                    checked={form.accommodation_required}
-                    onChange={(e) => handleInputChange('accommodation_required', e.target.checked)}
-                    className="w-5 h-5 rounded border-slate-300"
-                  />
-                  <Label htmlFor="accommodation_required" className="font-medium text-slate-700 cursor-pointer flex-1">
-                    I require accommodation during the conference
-                  </Label>
-                </div>
-
-                {form.accommodation_required && (
-                  <div className="space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <div>
-                      <Label className="text-slate-700 font-medium">Accommodation Type</Label>
-                      <Select value={form.accommodation_type} onValueChange={(value) => handleInputChange('accommodation_type', value)}>
-                        <SelectTrigger className="mt-2 bg-white border-slate-200">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="hostel">Hostel</SelectItem>
-                          <SelectItem value="hotel">Hotel</SelectItem>
-                          <SelectItem value="guest_house">Guest House</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-slate-700 font-medium">Check-in Date</Label>
-                        <Input
-                          type="date"
-                          value={form.check_in_date}
-                          onChange={(e) => handleInputChange('check_in_date', e.target.value)}
-                          className="mt-2 bg-white border-slate-200"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-slate-700 font-medium">Check-out Date</Label>
-                        <Input
-                          type="date"
-                          value={form.check_out_date}
-                          onChange={(e) => handleInputChange('check_out_date', e.target.value)}
-                          className="mt-2 bg-white border-slate-200"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label className="text-slate-700 font-medium">Special Requirements</Label>
-                      <textarea
-                        placeholder="Any special requirements (vegetarian meals, mobility access, etc.)"
-                        value={form.special_requirements}
-                        onChange={(e) => handleInputChange('special_requirements', e.target.value)}
-                        className="mt-2 w-full p-3 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Section 6: Student Information */}
-            <div className="border-b border-slate-200 pb-8">
-              <h2 className="text-xl font-semibold text-slate-900 mb-6">Student Information</h2>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <input
-                    type="checkbox"
-                    id="is_student"
-                    checked={form.is_student}
-                    onChange={(e) => handleInputChange('is_student', e.target.checked)}
-                    className="w-5 h-5 rounded border-slate-300"
-                  />
-                  <Label htmlFor="is_student" className="font-medium text-slate-700 cursor-pointer flex-1">
-                    I am a student
-                  </Label>
-                </div>
-
-                {form.is_student && (
-                  <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
-                    <input
-                      type="checkbox"
-                      id="student_grant_required"
-                      checked={form.student_grant_required}
-                      onChange={(e) => handleInputChange('student_grant_required', e.target.checked)}
-                      className="w-5 h-5 rounded border-amber-300"
-                    />
-                    <Label htmlFor="student_grant_required" className="font-medium text-amber-700 cursor-pointer flex-1">
-                      I require student travel grant
-                    </Label>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Section 7: Additional Information */}
+            {/* Section 5: Additional Information */}
             <div>
               <h2 className="text-xl font-semibold text-slate-900 mb-6">Additional Information</h2>
               <div>

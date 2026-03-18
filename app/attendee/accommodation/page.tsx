@@ -93,7 +93,12 @@ export default function AttendeeAccommodationPage() {
     conferenceId: '',
     checkInDate: '',
     checkOutDate: '',
+    checkInTime: '',
+    checkOutTime: '',
     roomType: 'standard',
+    accompaniedByFamily: false,
+    familyMemberCount: 0,
+    foodPreference: 'veg',
     specialRequests: '',
   });
 
@@ -136,7 +141,12 @@ export default function AttendeeAccommodationPage() {
       conferenceId: '',
       checkInDate: '',
       checkOutDate: '',
+      checkInTime: '',
+      checkOutTime: '',
       roomType: 'standard',
+      accompaniedByFamily: false,
+      familyMemberCount: 0,
+      foodPreference: 'veg',
       specialRequests: '',
     });
     setDialogOpen(false);
@@ -469,6 +479,73 @@ export default function AttendeeAccommodationPage() {
                 />
               </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="checkInTime">Check-in Time</Label>
+                <Input
+                  id="checkInTime"
+                  type="time"
+                  value={newRequest.checkInTime}
+                  onChange={(e) => setNewRequest({ ...newRequest, checkInTime: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="checkOutTime">Check-out Time</Label>
+                <Input
+                  id="checkOutTime"
+                  type="time"
+                  value={newRequest.checkOutTime}
+                  onChange={(e) => setNewRequest({ ...newRequest, checkOutTime: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="foodPref">Food Preference *</Label>
+              <Select
+                value={newRequest.foodPreference}
+                onValueChange={(value) => setNewRequest({ ...newRequest, foodPreference: value })}
+              >
+                <SelectTrigger className="mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="veg">Vegetarian</SelectItem>
+                  <SelectItem value="nonveg">Non-Vegetarian</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={newRequest.accompaniedByFamily}
+                  onChange={(e) => setNewRequest({ ...newRequest, accompaniedByFamily: e.target.checked })}
+                  className="w-4 h-4 rounded border-slate-300"
+                />
+                <span>Accompanied by family members</span>
+              </Label>
+            </div>
+
+            {newRequest.accompaniedByFamily && (
+              <div>
+                <Label htmlFor="familyCount">Number of Family Members *</Label>
+                <Input
+                  id="familyCount"
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={newRequest.familyMemberCount}
+                  onChange={(e) => setNewRequest({ ...newRequest, familyMemberCount: parseInt(e.target.value) || 0 })}
+                  className="mt-1"
+                  placeholder="0"
+                />
+              </div>
+            )}
 
             <div>
               <Label htmlFor="roomType">Room Type</Label>
